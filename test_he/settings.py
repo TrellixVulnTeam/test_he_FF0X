@@ -9,15 +9,12 @@ DEBUG = False
 
 try:
     from .local_settings import *
-except ImportError:
-    pass
-
-if COMPUTERNAME in hostname:
     SECRET_KEY = S_K
     DEBUG = True
 
-else:
+except ImportError:
     SECRET_KEY = environ['SECRET_KEY']
+    pass
 
 ALLOWED_HOSTS = ['*']
 
