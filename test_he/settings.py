@@ -2,18 +2,20 @@ from pathlib import Path
 import os
 from socket import gethostname
 from os import environ
-from .local_settings import *
+from test_he.local_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 hostname = gethostname()
+DEBUG = False
 
 if COMPUTERNAME in hostname:
     SECRET_KEY = S_K
+    DEBUG = True
 
 else:
     SECRET_KEY = environ['SECRET_KEY']
 
-DEBUG = True
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -59,7 +61,6 @@ WSGI_APPLICATION = 'test_he.wsgi.application'
 
 if COMPUTERNAME in hostname:
     # デバッグ環境
-    # DEBUG = True
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
@@ -69,7 +70,6 @@ if COMPUTERNAME in hostname:
 
 else:
     # 本番環境
-    # DEBUG = False
     import dj_database_url
     db_from_env = dj_database_url.config()
     DATABASES = {
