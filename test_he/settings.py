@@ -2,11 +2,15 @@ from pathlib import Path
 import os
 from socket import gethostname
 from os import environ
-from test_he.local_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 hostname = gethostname()
 DEBUG = False
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
 
 if COMPUTERNAME in hostname:
     SECRET_KEY = S_K
@@ -14,8 +18,6 @@ if COMPUTERNAME in hostname:
 
 else:
     SECRET_KEY = environ['SECRET_KEY']
-
-
 
 ALLOWED_HOSTS = ['*']
 
@@ -71,11 +73,11 @@ if COMPUTERNAME in hostname:
 else:
     # 本番環境
     import dj_database_url
+
     db_from_env = dj_database_url.config()
     DATABASES = {
         'default': dj_database_url.config()
     }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -91,7 +93,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 LANGUAGE_CODE = 'ja-JP'
 
