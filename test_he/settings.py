@@ -11,9 +11,21 @@ try:
     from .local_settings import *
     SECRET_KEY = S_K
     DEBUG = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 except ImportError:
     SECRET_KEY = environ['SECRET_KEY']
+    import dj_database_url
+
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
     pass
 
 ALLOWED_HOSTS = ['*']
@@ -58,23 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'test_he.wsgi.application'
 
-if COMPUTERNAME in hostname:
-    # デバッグ環境
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-
-else:
-    # 本番環境
-    import dj_database_url
-
-    db_from_env = dj_database_url.config()
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
