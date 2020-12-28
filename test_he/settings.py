@@ -2,10 +2,16 @@ from pathlib import Path
 import os
 from socket import gethostname
 from os import environ
+from .local_settings import *
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+hostname = gethostname()
 
-SECRET_KEY = environ['SECRET_KEY']
+if COMPUTERNAME in hostname:
+    SECRET_KEY = S_K
+
+else:
+    SECRET_KEY = environ['SECRET_KEY']
 
 DEBUG = True
 
@@ -51,26 +57,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'test_he.wsgi.application'
 
-hostname = gethostname()
+if COMPUTERNAME in hostname:
+    # デバッグ環境
+    # DEBUG = True
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
-# if "COMPUTER-NAME" in hostname:
-#     # デバッグ環境
-#     # DEBUG = True
-#     DATABASES = {
-#         'default': {
-#             'ENGINE': 'django.db.backends.sqlite3',
-#             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#         }
-#     }
-#
-# else:
-#     # 本番環境
-#     # DEBUG = False
-import dj_database_url
-db_from_env = dj_database_url.config()
-DATABASES = {
-    'default': dj_database_url.config()
-}
+else:
+    # 本番環境
+    # DEBUG = False
+    import dj_database_url
+    db_from_env = dj_database_url.config()
+    DATABASES = {
+        'default': dj_database_url.config()
+    }
 
 
 AUTH_PASSWORD_VALIDATORS = [
